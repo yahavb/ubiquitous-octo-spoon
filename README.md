@@ -1,13 +1,20 @@
 # ubiquitous-octo-spoon
-Streaming files from S3 to Kinesis Firehose 
+Continuous Hotspot Detection of Spatiotemporal Metrics using AWS Kinesis (Data Stream, Data Firehose, and Data Analytics)
 
-[Amazon Kinesis Data Firehose](https://aws.amazon.com/kinesis/data-firehose/) offers to ingest and process streaming data, deliver streaming data, analyze streaming data, and ingest and process media streams. In this mini project, we are going to demonstrate how to continuously collect, transform, and load streaming data into destinations such as Amazon S3.
+In this mini project, we demonstrate how to continuously discover hotspots by streaming, gathering streamed data, and analyzing the data for emerging objects hotspots.
   
-We use a synthetic data source located in S3 that indicates player event metrics. The dataset also, includes spatiotemporal data events denoted by `latitude` and `longitude`. The method presented herein is not limited to this data set or the data streaming model and can be extended. 
+We use a synthetic data source located in S3 that indicates player event metrics. The dataset also includes spatiotemporal data events denoted by `latitude` and `longitude`. 
 
-We start with (1) partitioning the data into fixed data chunks, and (2) streaming the data to a Kinesis Stream. We are going to use the [Python boto3 library](https://boto3.readthedocs.io/en/latest/reference/services/kinesis.html) to `put` streaming payload into Kinesis stream.  
+We start with (1) partitioning the data into fixed data chunks, and (2) streaming the data to a Kinesis Stream. We are going to use the [Python boto3 library](https://boto3.readthedocs.io/en/latest/reference/services/kinesis.html) to `put` streaming payload into Kinesis Data Stream. To start the simulation, we deployed the script [stream-simu.py](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/stream-simu.py) as a container within the same region as the region the Kinesis Data Stream, Firehose, and Analytics runs. 
 
-Finally, we will run real-time analytics to discover intersting things about the data like `HOTSPOT`s in the data source used. 
+Finally, we provision a Kinesis Data Firehose for continuous collection, transformation, and loading the streamed data into Kinesis Data Analytics that uses pre-defined `HOTSPOT` function for player hotspot detection. 
+
+## The Process 
+The continouos hotspot detection system comprises of four main components:
+* Simulated streaming from many players [stream-simu.py](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/stream-simu.py)
+* Kinesis Data Stream - `ubiquitous-octo-spoon-stream`
+* Kinesis Data Firehose - `ubiquitous-octo-spoon-delivery`
+* Kinesis Data Analytics - `ubiquitous-octo-spoon-stream-app`
 
 ## Create Analytics Application
 ![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/create-analytics-app.png)
