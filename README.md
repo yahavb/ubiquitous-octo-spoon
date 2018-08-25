@@ -9,12 +9,19 @@ We start with (1) partitioning the data into fixed data chunks, and (2) streamin
 
 Finally, we provision a Kinesis Data Firehose for continuous collection, transformation, and loading the streamed data into Kinesis Data Analytics that uses pre-defined `HOTSPOT` function for player hotspot detection. 
 
-## The Process 
+## The Data Flow
+
+
+## The Setup Process 
 The continouos hotspot detection system comprises of four main components:
-* Simulated streaming from many players [stream-simu.py](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/stream-simu.py)
-* Kinesis Data Stream - `ubiquitous-octo-spoon-stream`
-* Kinesis Data Firehose - `ubiquitous-octo-spoon-delivery`
-* Kinesis Data Analytics - `ubiquitous-octo-spoon-stream-app`
+* Configure and run a Kinesis Data Stream - `ubiquitous-octo-spoon-stream`
+* Simulated streaming from many players [stream-simu.py](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/stream-simu.py). 
+* Configure and run Kinesis Data Firehose delivery system - `ubiquitous-octo-spoon-delivery`
+* Configure and run Kinesis Data Analytics for hotspot detection - `ubiquitous-octo-spoon-stream-app`
+
+
+
+
 
 ## Create Analytics Application
 ![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/create-analytics-app.png)
