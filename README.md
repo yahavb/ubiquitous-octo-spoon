@@ -20,9 +20,10 @@ The continouos hotspot detection system comprises of four main components:
 * Configure and run Kinesis Data Analytics for hotspot detection - `ubiquitous-octo-spoon-stream-app`
 
 ### Create Kinesis Data Stream
-The Data Stream system ingest by multiple data-processing of custom application workloads. Its core functionality is the ability to horizontally scale in form of shards. A shard is a unit of throughput capacity. To accommodate for higher or lower throughput, a number of shards needs to be defined. 
+The Data Stream system ingest by multiple data-processing of custom application workloads. Its core functionality is the ability to horizontally scale in form of shards. A shard is a unit of throughput capacity. To accommodate for higher or lower throughput, a number of shards needs to be defined. In our example we set the number of shards to `2`
 ![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/data-stream.png)
 
+### Create Kinesis Data Firehose
 
 ## Create Analytics Application
 ![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/create-analytics-app.png)
