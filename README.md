@@ -77,8 +77,13 @@ The following IAM role is required to enable Kinesis Firehose access to S3. We u
    "Resource": "MY_BUCKET"
 }
 ```
-        
+
 ## Conclusions
+In this mini-project, we built data processing architecture that enables dynamic event patterns (HOTSPOTS) using AWS Kinesis.
+Data processing architecture aims to satisfy the needs for a robust system that is fault-tolerant, both against hardware failures and human mistakes, being able to serve a wide range of workloads and use cases, and in which low-latency reads and updates are required. The resulting system should be linearly scalable, and it should scale out rather than up. Setting up a scalable and fault-tolerant data processing architecture involves knowledge and maintenance efforts. AWS Kinesis does all of that for you. It is reliable, easy to use resulting quick turnaround in development and production environments. 
 
 ## Credits
-[Real-Time Hotspot Detection in Amazon Kinesis Analytics](https://aws.amazon.com/blogs/aws/real-time-hotspot-detection-in-amazon-kinesis-analytics/)
+* [Real-Time Hotspot Detection in Amazon Kinesis Analytics](https://aws.amazon.com/blogs/aws/real-time-hotspot-detection-in-amazon-kinesis-analytics/)
+* [Lambda Architecture using Kafka and Spark Streaming] (https://spark.apache.org/docs/latest/streaming-kafka-integration.html)
+http://lambda-architecture.net
+* [Lambda Architecture] (http://lambda-architecture.net)
