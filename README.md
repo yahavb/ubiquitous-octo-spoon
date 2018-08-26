@@ -84,6 +84,6 @@ Data processing architecture aims to satisfy the needs for a robust system that 
 
 ## Credits
 * [Real-Time Hotspot Detection in Amazon Kinesis Analytics](https://aws.amazon.com/blogs/aws/real-time-hotspot-detection-in-amazon-kinesis-analytics/)
-* [Lambda Architecture using Kafka and Spark Streaming] (https://spark.apache.org/docs/latest/streaming-kafka-integration.html)
+* [Lambda Architecture using Kafka and Spark Streaming](https://spark.apache.org/docs/latest/streaming-kafka-integration.html)
 http://lambda-architecture.net
-* [Lambda Architecture] (http://lambda-architecture.net)
+* [Lambda Architecture](http://lambda-architecture.net)
