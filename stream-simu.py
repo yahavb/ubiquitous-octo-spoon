@@ -1,16 +1,49 @@
-#!/opt/local/bin/python
+#!/usr/local/bin/python
 
 import csv
 import json
 import boto3
-def chunkit(l, n):
-    """Yield successive n-sized chunks from l."""
+import botocore
+
+bucket = 're-invent-2018-gaming-workshop'
+file_in_bucket= 'data-simu-short.csv'
+#file_in_bucket= 'player_move_events_simu.csv'
+
+buffer_size = 200
+stream_name="ubiquitous-octo-spoon-stream"
+
+s3resource = boto3.resource('s3')
+s3client = boto3.client('s3', region_name='us-west-2')
+kinesis = boto3.client('kinesis', region_name='us-west-2')
+
+bucket_url="https://s3.amazonaws.com/"+bucket+"/"
+
+
+def part(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-kinesis = boto3.client("kinesis")
-with open("data-simu.csv") as f:
+def stream(file2stream):
+  with open(file2stream) as f:
     reader = csv.DictReader(f)
-    records = chunkit([{"PartitionKey": "players", "Data": json.dumps(row)} for row in reader], 500)
-    for chunk in records:
-        kinesis.put_records(StreamName="ubiquitous-octo-spoon-stream", Records=chunk)
+    records = part([{"PartitionKey": "players", "Data": json.dumps(row)} for row in reader], buffer_size)
+    for partition in records:
+        print(partition)
+        kinesis.put_records(StreamName=stream_name, Records=partition)
+
+
+if __name__ == '__main__':
+  print("In main")
+  try: 
+    file2stream='/tmp/'+file_in_bucket
+    print("file2stream:"+file2stream)
+    print("downloading "+file2stream+"...")
+    s3resource.Bucket(bucket).download_file(file_in_bucket,file2stream)
+    print("file "+file2stream+" downloaded")
+    print("streaming file")
+    stream(file2stream)
+  except botocore.exceptions.ClientError as e:
+    if e.response['Error']['Code'] == "404":
+        print("The object does not exist.")
+    else:
+        raise
