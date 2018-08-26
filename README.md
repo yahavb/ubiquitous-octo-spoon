@@ -1,7 +1,7 @@
 # ubiquitous-octo-spoon
 Continuous Hotspot Detection of Spatiotemporal Metrics using AWS Kinesis (Data Stream, Data Firehose, and Data Analytics)
 
-In this mini project, we demonstrate how to continuously discover hotspots and other events insights in real-time by streaming, gathering streamed data, and analyzing the data for dynamic emerging objects like players moves patterns. For simplicity and robustness, we use AWS Kinesis tools for the real-time data pipeline. One can use [Lambda Architecture using Kafka and Spark Streaming] (https://spark.apache.org/docs/latest/streaming-kafka-integration.html) for achieving the same goal. 
+In this mini project, we demonstrate how to continuously discover hotspots and other events insights in real-time by streaming, gathering streamed data, and analyzing the data for dynamic emerging objects like players moves patterns. We build real-time, fully-managed, and scalable data processing architecture that enables dynamic event patterns. For simplicity and robustness, we use AWS Kinesis tools for the real-time data pipeline. One can use [Lambda Architecture using Kafka and Spark Streaming] (https://spark.apache.org/docs/latest/streaming-kafka-integration.html) for achieving the same goal. 
   
 We use a synthetic data source that was uploaded in advance to S3 that indicates player event metrics. The dataset also includes spatiotemporal data events denoted by `latitude` and `longitude`. 
 
@@ -79,7 +79,7 @@ The following IAM role is required to enable Kinesis Firehose access to S3. We u
 ```
 
 ## Conclusions
-In this mini-project, we built data processing architecture that enables dynamic event patterns (HOTSPOTS) using AWS Kinesis.
+In this mini-project, we built real-time, fully-managed, and scalable data processing architecture that enables dynamic event patterns (HOTSPOTS) using AWS Kinesis.  
 Data processing architecture aims to satisfy the needs for a robust system that is fault-tolerant, both against hardware failures and human mistakes, being able to serve a wide range of workloads and use cases, and in which low-latency reads and updates are required. The resulting system should be linearly scalable, and it should scale out rather than up. Setting up a scalable and fault-tolerant data processing architecture involves knowledge and maintenance efforts. AWS Kinesis does all of that for you. It is reliable, easy to use resulting quick turnaround in development and production environments. 
 
 ## Credits
