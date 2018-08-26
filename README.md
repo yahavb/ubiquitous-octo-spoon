@@ -44,10 +44,6 @@ The final step in the set is to author the SQL queries or add SQL from templates
 
 In the Real-time analytics, insert the SQL below. We first capture the fields to be analyzed, `longitude` and `latitude` in our case. Finally, we create a `PUMP` objects that is loaded with the streamed `longitude` and `latitude` data. The `HOTSPOTS` function is a new Kinesis Data Analytics SQL function you can use to idenitfy relatively dense regions in your data without having to explicity build and train complicated machine learning models. In this section we wish to identify subsections of `longitude` and `latitude`. Therefore, the `PUMP` uses `HOTSPOTS` captured in `SOURCE_SQL_STREAM_001`.
 
-
-You can identify subsections of your data that need immediate attention and take action programatically by streaming the hotspots out to a Kinesis Data stream, to a Firehose delivery stream, or by invoking a AWS Lambda function.
-
-
 ```
 CREATE OR REPLACE STREAM sql_stream (
     "longitude" DOUBLE,
@@ -64,8 +60,24 @@ CREATE OR REPLACE PUMP "STREAM_PUMP" AS INSERT INTO sql_stream
         )
     );
 ```
+### Create Kinesis Firehose
+The final step in our data-pipeline setup is delivering the data to its final destination. We use Kinesis Firehose for this step. Kinesis Firehose currently supports, S3, Redshift, ElasticSearch Service, and Splunk. For simplicity we use S3. 
 
+![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/data-firehose.png)
 
+The following IAM role is required to enable Kinesis Firehose access to S3. We used [firehose_delivery_role.json](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/firehose_delivery_role.json)
+
+```
+{
+   "Effect": "Allow",
+   "Action": [
+     "s3:Get*",
+     "s3:List*"
+   ],
+   "Resource": "MY_BUCKET"
+}
+```
+        
 ## Conclusions
 
 ## Credits
