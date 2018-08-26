@@ -15,37 +15,58 @@ We use the [Python boto3 library](https://boto3.readthedocs.io/en/latest/referen
 The Kinesis Data Stream endpoint continuously capture and temporarily store real-time data and the Kinesis Analytics application continuously read and process data from streaming sources in real-time. 
 
 ## The Setup Process 
-The continouos hotspot detection system comprises of four main components:
+The continuous hotspot detection system comprises four main components:
 * Configure and run a Kinesis Data Stream - `ubiquitous-octo-spoon-stream`
 * Write data to the stream using simulated streaming from many players [stream-simu.py](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/stream-simu.py). 
 * Configure and run Kinesis Data Analytics for hotspot detection - `ubiquitous-octo-spoon-stream-app`
 
 ### Create Kinesis Data Stream
-The Data Stream system ingest by multiple data-processing of custom application workloads. Its core functionality is the ability to horizontally scale in form of shards. A shard is a unit of throughput capacity. To accommodate for higher or lower throughput, a number of shards needs to be defined. In our example we set the number of shards to `2`
+The Data Stream system ingest by multiple data-processing of custom application workloads. Its core functionality is the ability to horizontally scale in the form of shards. A shard is a unit of throughput capacity. To accommodate for higher or lower throughput, some shards need to be defined. In our example, we set the number of shards to `2`
 ![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/data-stream.png)
 
 To create a data stream, click on create kinesis streams, set the name and the number shards. 
 
 ### Write Data to the Stream 
 * Deploy the data in S3 bucket. `data-simu.csv` in our case. 
-* Create ECS Image Repostiory
+* Create ECS Image Repository
 * Create ECS Cluster
-* Create ECS Task that specifies the container information for `stream-simu.py`, such as how many containers are part of the task, what VM to be used, how they are linked together, and which host ports they will use.
+* Create ECS Task that specifies the container information for `stream-simu.py`, such as how many containers are part of the task, what VM to be used, and how they are linked together.
+* Run the ECS task 
 
-## Create Analytics Application
-![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/create-analytics-app.png)
+For brevity, we will skip the ECS setup details. 
+
+### Create Analytics Application
+The first step in creating the Kinesis Analytics application is connecting to streaming data. Choose the Data Stream created above. In the case of many streams, pay attention to the `In-application stream name`. The first stream name usually follows the pattern `SOURCE_SQL_STREAM_001` where `001` denotes the data streams increments. Finally, click on Discover Schema while data is streamed. 
+
+The final step in the set is to author the SQL queries or add SQL from templates to analyze the streamed source data. Click Go to SQL Editor. 
+
+![alt text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/real-time-analytics.png)
+
+In the Real-time analytics, insert the SQL below. We first capture the fields to be analyzed, `longitude` and `latitude` in our case. Finally, we create a `PUMP` objects that is loaded with the streamed `longitude` and `latitude` data. The `HOTSPOTS` function is a new Kinesis Data Analytics SQL function you can use to idenitfy relatively dense regions in your data without having to explicity build and train complicated machine learning models. In this section we wish to identify subsections of `longitude` and `latitude`. Therefore, the `PUMP` uses `HOTSPOTS` captured in `SOURCE_SQL_STREAM_001`.
 
 
+You can identify subsections of your data that need immediate attention and take action programatically by streaming the hotspots out to a Kinesis Data stream, to a Firehose delivery stream, or by invoking a AWS Lambda function.
 
 
-## Misc
-After creating the delivery stream, send source records using the Firehose PUT API or the Amazon Kinesis Agent.
+```
+CREATE OR REPLACE STREAM sql_stream (
+    "longitude" DOUBLE,
+    "latitude" DOUBLE,
+    result VARCHAR(10000)
+); 
+CREATE OR REPLACE PUMP "STREAM_PUMP" AS INSERT INTO sql_stream 
+    SELECT "longitude", "latitude", result FROM
+        TABLE(HOTSPOTS(
+            CURSOR(SELECT STREAM * FROM "SOURCE_SQL_STREAM_001"),
+            1000,
+            0.013,
+            20
+        )
+    );
+```
 
-Firehose PUT APIs
-Use the Firehose PutRecord() or PutRecordBatch() API to send source records to the delivery stream.
 
-
-
+## Conclusions
 
 ## Credits
 [Real-Time Hotspot Detection in Amazon Kinesis Analytics](https://aws.amazon.com/blogs/aws/real-time-hotspot-detection-in-amazon-kinesis-analytics/)
