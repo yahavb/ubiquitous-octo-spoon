@@ -19,6 +19,9 @@ The continuous hotspot detection system comprises four main components:
 * Configure and run a Kinesis Data Stream - `ubiquitous-octo-spoon-stream`
 * Write data to the stream using simulated streaming from many players [stream-simu.py](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/stream-simu.py). 
 * Configure and run Kinesis Data Analytics for hotspot detection - `ubiquitous-octo-spoon-stream-app`
+* Configure Kinesis Data Firehose for delivering hotspots insights to S3 - `ubiquitous-octo-spoon-delivery`
+
+![alt_text](https://github.com/yahavb/ubiquitous-octo-spoon/blob/master/arch.png)
 
 ### Create Kinesis Data Stream
 The Data Stream system ingest by multiple data-processing of custom application workloads. Its core functionality is the ability to horizontally scale in the form of shards. A shard is a unit of throughput capacity. To accommodate for higher or lower throughput, some shards need to be defined. In our example, we set the number of shards to `2`
