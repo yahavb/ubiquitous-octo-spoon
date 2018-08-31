@@ -4,12 +4,14 @@ import csv
 import json
 import boto3
 import botocore
+import os.path 
+from pathlib import Path
 
 bucket = 're-invent-2018-gaming-workshop'
-file_in_bucket= 'data-simu-short.csv'
-#file_in_bucket= 'player_move_events_simu.csv'
+#file_in_bucket= 'data-simu-short.csv'
+file_in_bucket= 'player_move_events_simu.csv'
 
-buffer_size = 200
+buffer_size =200
 stream_name="ubiquitous-octo-spoon-stream"
 
 s3resource = boto3.resource('s3')
@@ -28,8 +30,9 @@ def stream(file2stream):
     reader = csv.DictReader(f)
     records = part([{"PartitionKey": "players", "Data": json.dumps(row)} for row in reader], buffer_size)
     for partition in records:
-        print(partition)
+#        print(partition)
         kinesis.put_records(StreamName=stream_name, Records=partition)
+        print("partition streamed")
 
 
 if __name__ == '__main__':
@@ -37,10 +40,13 @@ if __name__ == '__main__':
   try: 
     file2stream='/tmp/'+file_in_bucket
     print("file2stream:"+file2stream)
-    print("downloading "+file2stream+"...")
-    s3resource.Bucket(bucket).download_file(file_in_bucket,file2stream)
-    print("file "+file2stream+" downloaded")
-    print("streaming file")
+    if Path(file2stream).is_file():
+      print("file exists "+file2stream+"...")
+    else:
+      print("downloading "+file2stream+"...")
+      s3resource.Bucket(bucket).download_file(file_in_bucket,file2stream)
+      print("file "+file2stream+" downloaded")
+    print("streaming file "+file2stream)
     stream(file2stream)
   except botocore.exceptions.ClientError as e:
     if e.response['Error']['Code'] == "404":
