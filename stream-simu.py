@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/python
 
 import csv
 import json
@@ -8,8 +8,8 @@ import os.path
 from pathlib import Path
 
 bucket = 're-invent-2018-gaming-workshop'
-#file_in_bucket= 'data-simu-short.csv'
-file_in_bucket= 'player_move_events_simu.csv'
+file_in_bucket= 'data-simu-short.csv'
+#file_in_bucket= 'player_move_events_simu.csv'
 
 buffer_size =200
 stream_name="ubiquitous-octo-spoon-stream"

@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: streamsimu
+    release: r1
+  name: streamsimu-es
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamsimu
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: streamsimu
+    spec:
+      nodeSelector:
+        lifecycle: spot
+      containers:
+      - env:
+        - name: SRC_DATA_BUCKET
+          value: "skydance-telemetry"
+        - name: PREFIX
+          value: "simulation-data/ticker/"
+        - name: BUFFER_SIZE
+          value: "200"
+        - name: STREAM_NAME
+          value: "telemetry-es"
+        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/streamsimu
+        imagePullPolicy: Always
+        name: streamsimu
+        command: ["/stream-simu.py"]
+        resources:
+          requests:
+            cpu: 256m
+            memory: 512Mi
+        volumeMounts:
+          - name: simu-storage
+            mountPath: /tmp/simulation-data/ticker
+      volumes:
+        - name: simu-storage
+          emptyDir: {}
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 1

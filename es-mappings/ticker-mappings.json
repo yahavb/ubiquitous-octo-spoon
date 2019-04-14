@@ -1,0 +1,12 @@
+{
+	"mappings":{
+		"doc":{
+			"properties":{	
+				"change":{"type":"float"},
+				"price":{"type":"float"},
+				"sector":{"type":"text"},
+				"ticker_symbol":{"type":"text"}
+			}
+		}
+	}
+}
